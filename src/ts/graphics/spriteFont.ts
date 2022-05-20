@@ -59,13 +59,14 @@ export let fontLoaded = false;
             y: padTop + Math.floor(index / charPerLine) * (padTop + fontHeight) }
     }
 
-    function createFontImage(offset: Point) {
+    function createFontImage(offset: Point, code: number) {
         const canvas = createCanvas(fontWidth, fontHeight);
+        canvas.id = code.toString(16);
         canvas.getContext('2d')!.drawImage(fontImage, offset.x, offset.y, fontWidth, fontHeight, 0, 0, fontWidth, fontHeight);
         return canvas;
     }
 
     fontSprites = ((char: string) => fontSprites[getCharcode(char)]) as any;
-    await times2(charCounts, i => fontSprites[i] = createFontImage(getSpriteFontOffset(i)));
+    await times2(charCounts, i => fontSprites[i] = createFontImage(getSpriteFontOffset(i), i));
     fontLoaded = true;
 })();

@@ -59,13 +59,13 @@ export class ConIO {
             else this.handleInput(typing[1]);
         })
     }
-    private handleInput(charCode: number) {
+    private async handleInput(charCode: number) {
         this.console.print(asciiChars[charCode]);
         if (charCode === 255) {
-            handleCommands(this.inBuffer, this.out.bind(this), this.console);
+            await handleCommands(this.inBuffer, this.out.bind(this), this.console);
             this.inBuffer.fill(0);
             this.bufferPos = 0;
-            if (this.console.posIndex > 0) this.endl().endl();
+            if (this.console.posIndex > 0) this.endl();
             this.out('A:\\>');
         }
         else this.inBuffer[this.bufferPos++] = charCode;

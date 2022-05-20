@@ -22,10 +22,22 @@ export class Console {
         this.currentPos.x = value % this.w;
         this.currentPos.y = Math.floor(value / this.w);
     }
-    print(text: string) {
+    print(text: string | number[]) {
+        if (Array.isArray(text))
+            text.forEach(c => {
+                if (c === 255) this.endl();
+                else {
+                    if (this.posIndex + 1 >= this.buffer.length) this.endl();
+                    this.buffer[this.posIndex++] = c;
+                }
+            });
+        else
         text.split('').forEach(c => {
             if (c === '\n') this.endl();
-            else this.buffer[this.posIndex++] = getCharcode(c);
+            else {
+                if (this.posIndex + 1 >= this.buffer.length) this.endl();
+                this.buffer[this.posIndex++] = getCharcode(c);
+            }
         });
     }
     endl() {
@@ -48,6 +60,6 @@ export class Console {
                 batch.drawCharFromCode(this.buffer[xyToIndex(x, y, this.w)], padLeft + x * fontWidth, padTop + y * fontHeight);
             }
         }
-        if (now % 500 < 250) batch.drawChar('▬', padLeft + this.currentPos.x * fontWidth, padTop + this.currentPos.y * fontHeight)
+        if (now % 500 < 250) batch.drawCharFromChar('▬', padLeft + this.currentPos.x * fontWidth, padTop + this.currentPos.y * fontHeight)
     }
 }

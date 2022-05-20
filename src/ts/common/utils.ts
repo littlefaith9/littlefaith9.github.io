@@ -40,3 +40,10 @@ export interface Rect extends Point {
     w: number;
     h: number;
 }
+
+export function splitColorHexToArray(color: number): Uint8ClampedArray {
+    const r = color >> 16 & 0xff;
+    const g = color >> 8 & 0xff;
+    const b = color & 0xff;
+    return new Uint8ClampedArray([r, g, b, 0xff]);
+}

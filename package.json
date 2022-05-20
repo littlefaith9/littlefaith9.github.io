@@ -1,6 +1,6 @@
 {
   "name": "littlefaith9.github.io",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/littlefaith9/littlefaith9.github.io#readme",
   "dependencies": {
     "canvas": "^2.9.1",
+    "html-webpack-plugin": "^5.5.0",
     "typescript": "^4.6.4",
     "webpack": "^5.72.1"
   },

@@ -1,6 +1,7 @@
 const TerserPlugin= require('terser-webpack-plugin');
 const { version } = require('./package.json');
 const { DefinePlugin } = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	mode: 'production',
@@ -29,5 +30,8 @@ module.exports = {
 	stats: {
 		warningsFilter: /some filter/
 	},
-	plugins: [new DefinePlugin({ DEVELOPMENT: false, VERSION: JSON.stringify(version) })],
+	plugins: [
+		new DefinePlugin({ DEVELOPMENT: false, VERSION: JSON.stringify(version) }),
+		new HtmlWebpackPlugin({ title: 'LittleFaith9', meta: { 'theme-color': '#a0f03c' }, hash: true })
+	],
 };
