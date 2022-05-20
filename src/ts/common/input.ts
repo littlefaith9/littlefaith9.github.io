@@ -1,6 +1,6 @@
 const firefox = /firefox/i.test(navigator.userAgent);
 
-export enum Key {
+export const enum Key {
 	// Keyboard
 	BACKSPACE = 8,
 	TAB = 9,
