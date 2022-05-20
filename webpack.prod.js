@@ -1,8 +1,10 @@
-const TerserPlugin= require('terser-webpack-plugin')
+const TerserPlugin= require('terser-webpack-plugin');
+const { version } = require('./package.json');
+const { DefinePlugin } = require('webpack');
 
 module.exports = {
 	mode: 'production',
-	entry: './src/ts/graphics/screen.ts',
+	entry: './src/ts/common/entry.ts',
 	output: {
 		path: __dirname,
 		filename: './index.js',
@@ -26,5 +28,6 @@ module.exports = {
 	},
 	stats: {
 		warningsFilter: /some filter/
-	}
+	},
+	plugins: [new DefinePlugin({ DEVELOPMENT: false, VERSION: JSON.stringify(version) })],
 };

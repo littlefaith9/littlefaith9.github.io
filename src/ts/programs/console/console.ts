@@ -10,8 +10,6 @@ export class Console {
     buffer: Uint8Array;
     w: number;
     h: number;
-    lastCursor = 0;
-    hasCursor = false;
     constructor (private screenW: number, private screenH: number) {
         this.w = Math.floor((this.screenW - padLeft) / fontWidth);
         this.h = Math.floor((this.screenH - padTop) / fontHeight);
@@ -32,7 +30,17 @@ export class Console {
     }
     endl() {
         this.currentPos.x = 0;
-        this.currentPos.y++;
+        if (this.currentPos.y + 1 >= this.h) {
+            const save = this.buffer.slice(this.w);
+            this.buffer.fill(0);
+            this.buffer.set(save);
+        }
+        else this.currentPos.y++;
+    }
+    clear() {
+        this.buffer.fill(0);
+        this.currentPos.x = 0;
+        this.currentPos.y = 0;
     }
     draw(batch: SpriteBatch, now: number) {
         for (let y = 0; y < this.h; y++) {
@@ -40,10 +48,6 @@ export class Console {
                 batch.drawCharFromCode(this.buffer[xyToIndex(x, y, this.w)], padLeft + x * fontWidth, padTop + y * fontHeight);
             }
         }
-        if (this.hasCursor) batch.drawChar('▬', padLeft + this.currentPos.x * fontWidth, padTop + this.currentPos.y * fontHeight)
-        if (now - this.lastCursor > 500) {
-            this.hasCursor = !this.hasCursor;
-            this.lastCursor = now;
-        }
+        if (now % 500 < 250) batch.drawChar('▬', padLeft + this.currentPos.x * fontWidth, padTop + this.currentPos.y * fontHeight)
     }
 }

@@ -1,3 +1,5 @@
+import { InputManager } from "../common/input";
+import { ConIO } from "../programs/console/conio";
 import { Console } from "../programs/console/console";
 import { createCanvas } from "./canvasUtils";
 import { SpriteBatch } from "./spriteBatch";
@@ -5,57 +7,25 @@ import { SpriteBatch } from "./spriteBatch";
 const screenWidth = 640;
 const screenHeight = 480;
 
-const drawing = `                             ▓▓▓▓             
-                            ▓██▓▓▓            
-                     ▓▒▒▒▒▓▓████▓▓▓           
-    ▓▓▓▓▓▓▓▒▓ ▓▓▒▒▒▒▒▒▒▒▒▒▒▓████▓▓▓           
-        ▓▓▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▓████▓▓▓           
-      ▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▓███▓▓▓▓           
-       ▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒░░░▒▓███▓▓▓▓           
-         ▒▒▒▒▒▒▒▒▒▒▒▒░░▒▓▓▓▓▓▓▓▓▓▓▓           
-         ▒▒▒▒▒▒▒▒▒▒░░░░▒▒▒▓▓▓▓▓▓▓▒▒▓          
-         ▒▒▒▒▒▒▒▒▒░▒▓▒▓█▓▒▒▒▒▓▓▒▒▒▒▒▓         
-         ▒░░░░▒▒░░▓██▓██▓░░▓▒▓▓▓▒▒▒▓          
-        ▓▒░░░░░▒████████▓▒▒▓▓▓▓▒▒▒▒           
-       ▓▒░░░░░▒▓████▓▓▓▓▓▓▓▓▓▓▒▒▒▒▓           
-      ▓▒░░░▒▓ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▒▓             
-                 ▓▓▓▓▒▒░░░░░▒▒▓               
-              ▓▒░░░▒▒▒░░░░░▒▒▒                
-              ▓▒░░▒▒▒▒░░░░░▒▒▒▓               
-               ▓░░░▒▒▒▒░░░░░▒▒▓               
-Hello! It's Faith Donk.
-The site is under construction.
-Stay tuned!`;
-
-class ScreenRenderer {
+export class ScreenRenderer {
 	canvas = createCanvas(screenWidth, screenHeight);
 	console = new Console(screenWidth, screenHeight);
+	input = new InputManager();
+	conio = new ConIO(this.console, this.input);
 	batch: SpriteBatch;
 	constructor() {
 		this.canvas.id = 'canvas';
 		document.body.appendChild(this.canvas);
 		this.batch = new SpriteBatch(this.canvas);
 		requestAnimationFrame(this.redraw.bind(this));
-		this.console.print(drawing)
-		// window.addEventListener('resize', this.resizeCanvas.bind(this));
+		this.conio.out('littlefaith9.github.io [version ', VERSION, ']').endl().out('Command Prompt').endl().endl().out('A:\\>');
+		this.conio.init();
 	}
-	// resizeCanvas() {
-	// 	const scale = this.getScale();
-	// 	this.canvas.width = screenWidth * scale;
-	// 	this.canvas.height = screenHeight * scale;
-	// }
-	// getScale() {
-	// 	return Math.min(window.innerWidth / screenWidth, window.innerHeight / screenHeight);
-	// }
 	redraw(now: number) {
-		// const scale = this.getScale();
 		this.batch.start();
-		// this.batch.setSmoothing(false);
-		// this.batch.scale(scale, scale);
 		this.batch.clear();
 		this.console.draw(this.batch, now);
 		this.batch.end();
 		requestAnimationFrame(this.redraw.bind(this));
 	}
 }
-(window as any).screen = new ScreenRenderer();
