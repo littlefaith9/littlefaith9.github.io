@@ -40,11 +40,11 @@ export class GlitchScreen {
                     clearInterval(intv);
                     res();
                 }
-                const length = Math.floor(Math.random() * this.console.w) + this.console.w * Math.floor(Math.random() * this.console.h / 4);
+                const length = Math.floor(Math.random() * this.console.w);
                 const randomString = times(length, () => Math.floor(Math.random() * 256));
-                Beeper.beep(5);
+                Beeper.beep(1);
+                this.console.posIndex = this.console.w * this.console.h - 1;
                 this.console.print(randomString);
-                this.console.endl();
             }, 500);
         });
     }

@@ -47,7 +47,7 @@ module.exports = () => {
 			new HtmlWebpackPlugin({
 				title: 'LittleFaith9',
 				meta: {
-					'theme-color': '#00007f',
+					'theme-color': '#000000',
 					'viewport': 'height=device-height, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, target-densitydpi=device-dpi'
 				},
 				hash: true,
