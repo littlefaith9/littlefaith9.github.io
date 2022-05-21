@@ -1,4 +1,5 @@
 import { point, pointToIndex, xyToIndex } from '../../common/utils'
+import { ScreenRenderer } from '../../graphics/screen';
 import { SpriteBatch } from '../../graphics/spriteBatch';
 import { fontHeight, fontWidth, getCharcode } from '../../graphics/spriteFont';
 
@@ -60,6 +61,6 @@ export class Console {
                 batch.drawCharFromCode(this.buffer[xyToIndex(x, y, this.w)], padLeft + x * fontWidth, padTop + y * fontHeight);
             }
         }
-        if (now % 500 < 250) batch.drawCharFromChar('▬', padLeft + this.currentPos.x * fontWidth, padTop + this.currentPos.y * fontHeight)
+        if (now % 500 < 250 && !ScreenRenderer.inputDisabled) batch.drawCharFromChar('▬', padLeft + this.currentPos.x * fontWidth, padTop + this.currentPos.y * fontHeight)
     }
 }

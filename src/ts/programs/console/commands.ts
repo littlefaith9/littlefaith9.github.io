@@ -1,3 +1,4 @@
+import { isNumber } from "../../common/utils";
 import { ScreenRenderer } from "../../graphics/screen";
 import { SpriteBatch } from "../../graphics/spriteBatch";
 import { asciiChars } from "../../graphics/spriteFont";
@@ -10,7 +11,7 @@ interface Command {
     desc: string;
     handler: CommandHandler;
 }
-type CommandHandler = (message: string[], out: any, console: Console) => void | Promise<void>;
+type CommandHandler = (message: string[], out: any, console: Console) => any | Promise<any>;
 
 function command(name: string, param: string, desc: string, handler: CommandHandler) {
     return { [name]: { param, desc, handler } }
@@ -79,22 +80,36 @@ Stay tuned for more stuff!`;
             const colorFG = parseInt(message[0][1], 16);
             const colorBG = parseInt(message[0][0], 16);
             if (colorFG === colorBG) return showHelp();
-            if (!colorFG || colorFG < 0 || colorFG > 15) return showHelp();
-            if (!colorBG || colorBG < 0 || colorBG > 15) return showHelp();
+            if (!isNumber(colorFG) || colorFG < 0 || colorFG > 15) return showHelp();
+            if (!isNumber(colorFG) || colorBG < 0 || colorBG > 15) return showHelp();
             SpriteBatch.colorFG = colorFG;
             SpriteBatch.colorBG = colorBG;
         }
     }),
     ...command('scale', '<number>', 'set scale', (message) => {
-        const scale = parseInt(message[0]);
+        const scale = parseFloat(message[0]);
         if (!message[0] || !scale) ScreenRenderer.scale = ScreenRenderer.scale % 2 + 1;
         else ScreenRenderer.scale = scale;
     }),
-    ...command('beep', '<second>', 'make beep sound', (message) => {
+    ...command('beep', '<second> <frequency>', 'make beep sound', (message) => {
         const second = parseInt(message[0]) || 1;
-        Beeper.beep(second);
+        const frequency = parseInt(message[1]) || 800;
+        Beeper.beep(second, frequency);
     }),
-    ...command('gui', '', '[WIP?]Graphic User Interface', (_, __, con) => new GlitchScreen(con).run())
+    ...command('info', '', 'show browser & device info', (_, out) => {
+        out('codeName:' + navigator.appCodeName + '\n');
+        out('name:' + navigator.appName + '\n');
+        out('version:' + navigator.appVersion + '\n');
+        out('platform:' + navigator.platform + '\n');
+        out('userAgent:' + navigator.userAgent + '\n');
+    }),
+    ...command('gui', '', '[WIP?]Graphic User Interface', (_, __, con) => new GlitchScreen(con).run()),
+    ...command('exit', '', 'close window', () => window.close()),
+    ...command('stretch', '', 'toggle stretch', (_, out) => {
+        ScreenRenderer.stretch = !ScreenRenderer.stretch;
+        out('stretch is ' + (ScreenRenderer.stretch ? 'on' : 'off') + '\n');
+        localStorage.setItem('stretch', ScreenRenderer.stretch ? '1' : '0');
+    })
 };
 
 export async function handleCommands(messageBuffer: Uint8Array, out: any, con: Console) {

@@ -13,7 +13,7 @@ export function times2<T>(repeat: number, item: (index: number) => T): Promise<T
 }
 
 export function isNumber(obj: unknown): obj is number {
-    return typeof obj === 'number';
+    return typeof obj === 'number' && !isNaN(obj);
 }
 
 export interface Point {
@@ -23,6 +23,10 @@ export interface Point {
 
 export function point(x: number, y: number) {
     return { x, y };
+}
+
+export function distance(ax: number, ay: number, bx: number, by: number) {
+    return Math.sqrt(Math.pow((ax - bx), 2) + Math.pow((ay - by), 2));
 }
 
 // export function pointToIndex(point: Point, width: number): number;

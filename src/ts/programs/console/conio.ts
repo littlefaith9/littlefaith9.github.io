@@ -1,5 +1,6 @@
 import { InputManager, Key } from "../../common/input";
 import { times } from "../../common/utils";
+import { ScreenRenderer } from "../../graphics/screen";
 import { asciiChars } from "../../graphics/spriteFont";
 import { handleCommands } from "./commands";
 import { Console } from "./console";
@@ -60,13 +61,16 @@ export class ConIO {
         })
     }
     private async handleInput(charCode: number) {
+        if (ScreenRenderer.inputDisabled) return;
         this.console.print(asciiChars[charCode]);
         if (charCode === 255) {
+            ScreenRenderer.inputDisabled = true;
             await handleCommands(this.inBuffer, this.out.bind(this), this.console);
             this.inBuffer.fill(0);
             this.bufferPos = 0;
             if (this.console.posIndex > 0) this.endl();
             this.out('A:\\>');
+            ScreenRenderer.inputDisabled = false;
         }
         else this.inBuffer[this.bufferPos++] = charCode;
     }

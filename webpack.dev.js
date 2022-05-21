@@ -1,6 +1,7 @@
 const path = require('path');
 const { version } = require('./package.json');
 const { DefinePlugin } = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
@@ -30,5 +31,22 @@ module.exports = {
 	stats: {
 		warningsFilter: /some filter/
 	},
-	plugins: [new DefinePlugin({ DEVELOPMENT: true, VERSION: JSON.stringify(version) })],
+	plugins: [
+		new DefinePlugin({ DEVELOPMENT: true, VERSION: JSON.stringify(version) }),
+		new HtmlWebpackPlugin({
+			title: 'LittleFaith9',
+			meta: {
+				'theme-color': '#000000',
+				'viewport': 'height=device-height, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, target-densitydpi=device-dpi'
+			},
+			// templateContent: `
+			// <html>
+			// 	<head>
+			// 		<link rel="manifest" href="manifest.webmanifest">
+			// 	</head>
+			// 	<body></body>
+			// </html>
+			// `
+		}),
+	],
 };
